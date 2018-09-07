@@ -1,49 +1,120 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 
 namespace Exception_handling
 {
     class Program
     {
+        static System.Collections.Specialized.StringCollection log = new System.Collections.Specialized.StringCollection();
+        static List<string> fileNames = new List<string>();
+        static string path = @"\fileName.txt";
+
         static void Main(string[] args)
         {
             #region Task6_1
-            double dividend;
-            double divisor;
-            double result = 0;
+            //double dividend;
+            //double divisor;
+            //double result = 0;
 
-            try
-            {
-                Console.Write("Enter dividend: ");
-                dividend = double.Parse(Console.ReadLine());
-                Console.Write("Enter divisor: ");
-                divisor = double.Parse(Console.ReadLine());
-                result = Div(dividend,divisor);
-            }
-            catch (DivideByZeroException ex)
-            {
-                Console.Error.WriteLine("Error: " + ex.Message);
-            }
-            catch (FormatException)
-            {
-                Console.Error.WriteLine("Invalid double number!");
-            }
-            catch (OverflowException)
-            {
-                Console.Error.WriteLine(
-                   "The number is too big to fit in double!");
-            }
+            //try
+            //{
+            //    Console.Write("Enter dividend: ");
+            //    dividend = double.Parse(Console.ReadLine());
+            //    Console.Write("Enter divisor: ");
+            //    divisor = double.Parse(Console.ReadLine());
+            //    result = Div(dividend,divisor);
+            //}
+            //catch (DivideByZeroException ex)
+            //{
+            //    Console.Error.WriteLine("Error: " + ex.Message);
+            //}
+            //catch (FormatException)
+            //{
+            //    Console.Error.WriteLine("Invalid double number!");
+            //}
+            //catch (OverflowException)
+            //{
+            //    Console.Error.WriteLine(
+            //       "The number is too big to fit in double!");
+            //}
 
-            if (result != 0)
+            //if (result != 0)
+            //{
+            //    Console.WriteLine($"\nReult division = {result}");
+            //}
+            //Console.WriteLine("\nPress any key");
+            //Console.ReadKey();
+            #endregion
+
+            #region Task6_2
+            System.IO.DriveInfo di = new System.IO.DriveInfo(@"c:\");
+
+            if (!di.IsReady)
             {
-                Console.WriteLine($"\nReult division = {result}");
+                Console.WriteLine("The drive {0} could not be read", di.Name);
             }
-            Console.WriteLine("\nPress any key");
+            System.IO.DirectoryInfo rootDir = di.RootDirectory;
+            WalkDirectoryTree(rootDir);
+            
+            // Write out all the files that could not be processed.
+            //Console.WriteLine("Files with restricted access:");
+            //foreach (string s in log)
+            //{
+            //    Console.WriteLine(s);
+            //}
+            // Keep the console window open in debug mode.
+            Console.WriteLine("Press any key");
             Console.ReadKey();
             #endregion
+        }
+
+        static void WalkDirectoryTree(System.IO.DirectoryInfo root)
+        {
+            System.IO.FileInfo[] files = null;
+            System.IO.DirectoryInfo[] subDirs = null;
+
+            // First, process all the files directly under this folder
+            try
+            {
+                files = root.GetFiles("*.*");
+            }
+            // This is thrown if even one of the files requires permissions greater
+            // than the application provides.
+            catch (UnauthorizedAccessException e)
+            {
+                // This code just writes out the message and continues to recurse.
+                // You may decide to do something different here. For example, you
+                // can try to elevate your privileges and access the file again.
+                log.Add(e.Message);
+            }
+
+            catch (System.IO.DirectoryNotFoundException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            if (files != null)
+            {
+                foreach (System.IO.FileInfo fi in files)
+                {
+                    // In this example, we only access the existing FileInfo object. If we
+                    // want to open, delete or modify the file, then
+                    // a try-catch block is required here to handle the case
+                    // where the file has been deleted since the call to TraverseTree().
+                    Console.WriteLine(fi.FullName);
+                    File.WriteAllText(path, fi.FullName);
+                }
+
+                // Now find all the subdirectories under this directory.
+                subDirs = root.GetDirectories();
+
+                foreach (System.IO.DirectoryInfo dirInfo in subDirs)
+                {
+                    // Resursive call for each subdirectory.
+                    WalkDirectoryTree(dirInfo);
+                }
+            }
         }
 
         public static double Div(double dividend, double divisor)
