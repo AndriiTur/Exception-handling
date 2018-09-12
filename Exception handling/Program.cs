@@ -207,68 +207,72 @@ namespace Exception_handling
             #endregion
 
             #region HomeWork6_B
-            int count = 0;
-            int startVal = 1;
-            int endVal = 100;
-            bool readFile = false;
-            string key;
-            string line;
+            //int count = 0;
+            //int startVal = 1;
+            //int endVal = 100;
+            //bool readFile = false;
+            //string key;
+            //string line;
 
-            Console.Write("Choose method for enter digits(c-console,f-file): ");
-            key = Console.ReadLine();
-            if (key.ToLower() == "f")
-            {
-                readFile = true;
-            }
-            else if (key.ToLower() == "c")
-            {
-                readFile = false;
-            }
+            //Console.Write("Choose method for enter digits(c-console,f-file): ");
+            //key = Console.ReadLine();
+            //if (key.ToLower() == "f")
+            //{
+            //    readFile = true;
+            //}
+            //else if (key.ToLower() == "c")
+            //{
+            //    readFile = false;
+            //}
 
-            if (readFile)
-            {
-                using (StreamReader sr = new StreamReader(path, System.Text.Encoding.Default))
-                {
-                    while ((line = sr.ReadLine()) != null && count < 10 && startVal < 99)
-                    {
-                        try
-                        {
-                            Console.Write($"Enter {count + 1} digit: ");
-                            if (ReaNumber(startVal, endVal, line))
-                            {
-                                Console.WriteLine($"\nDigit in range [{startVal} , {endVal}] {int.Parse(line)}");
-                                startVal = int.Parse(line);
-                                count++;
-                            }
-                        }
-                        catch (FormatException e)
-                        {
-                            Console.Error.WriteLine(e.Message);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                while (count < 10 && startVal < 99)
-                {
-                    try
-                    {
-                        Console.Write($"Enter {count + 1} digit: ");
-                        line = Console.ReadLine();
-                        if (ReaNumber(startVal, endVal, line))
-                        {
-                            Console.WriteLine($"\nDigit in range [{startVal} , {endVal}] {int.Parse(line)}");
-                            startVal = int.Parse(line);
-                            count++;
-                        }
-                    }
-                    catch (FormatException e)
-                    {
-                        Console.Error.WriteLine(e.Message);
-                    }
-                }
-            }
+            //if (readFile)
+            //{
+            //    using (StreamReader sr = new StreamReader(path, System.Text.Encoding.Default))
+            //    {
+            //        while ((line = sr.ReadLine()) != null && count < 10 && startVal < 99)
+            //        {
+            //            try
+            //            {
+            //                Console.Write($"Enter {count + 1} digit: ");
+            //                if (ReaNumber(startVal, endVal, line))
+            //                {
+            //                    Console.WriteLine($"\nDigit in range [{startVal} , {endVal}] {int.Parse(line)}");
+            //                    startVal = int.Parse(line);
+            //                    count++;
+            //                }
+            //            }
+            //            catch (FormatException e)
+            //            {
+            //                Console.Error.WriteLine(e.Message);
+            //            }
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    while (count < 10 && startVal < 99)
+            //    {
+            //        try
+            //        {
+            //            Console.Write($"Enter {count + 1} digit: ");
+            //            line = Console.ReadLine();
+            //            if (ReaNumber(startVal, endVal, line))
+            //            {
+            //                Console.WriteLine($"\nDigit in range [{startVal} , {endVal}] {int.Parse(line)}");
+            //                startVal = int.Parse(line);
+            //                count++;
+            //            }
+            //        }
+            //        catch (FormatException e)
+            //        {
+            //            Console.Error.WriteLine(e.Message);
+            //        }
+            //    }
+            //}
+            #endregion
+
+            #region HomeWork6_C
+            //try catch in task (1 - 5)
             #endregion
         }
 
