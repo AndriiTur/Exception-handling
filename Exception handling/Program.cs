@@ -8,7 +8,7 @@ namespace Exception_handling
     {
         static System.Collections.Specialized.StringCollection log = new System.Collections.Specialized.StringCollection();
         static List<string> fileNames = new List<string>();
-        static string path = @"\fileName.txt";
+        static string path = @"\fileNames.txt";
 
         static void Main(string[] args)
         {
@@ -48,82 +48,136 @@ namespace Exception_handling
             #endregion
 
             #region Task6_2
-            System.IO.DriveInfo di = new System.IO.DriveInfo(@"c:\");
-
-            if (!di.IsReady)
-            {
-                Console.WriteLine("The drive {0} could not be read", di.Name);
-            }
-            System.IO.DirectoryInfo rootDir = di.RootDirectory;
-            WalkDirectoryTree(rootDir);
-            
-            // Write out all the files that could not be processed.
-            //Console.WriteLine("Files with restricted access:");
-            //foreach (string s in log)
+            //double dividend;
+            //double divisor;
+            //List<double> result = new List<double>();
+            //var currentDirr = Directory.GetCurrentDirectory();
+            //string path = currentDirr + @"\data.txt";
+            //string rezPath = currentDirr + @"\rez.txt";
+            //try
             //{
-            //    Console.WriteLine(s);
+            //    using (StreamReader sr = new StreamReader(path, System.Text.Encoding.Default))
+            //    {
+            //        string line;
+            //        while ((line = sr.ReadLine()) != null)
+            //        {
+            //            string[] arrdigits = line.Split(new char[]{'/'}, 2);
+            //            dividend = double.Parse(arrdigits[0]);
+            //            divisor = double.Parse(arrdigits[1]);
+            //            result.Add(Div(dividend, divisor));
+            //            Console.WriteLine($"{dividend} / {divisor} = {result}");
+            //        }
+            //    }
+            //    using (StreamWriter sw = new StreamWriter(rezPath, false, System.Text.Encoding.Default))
+            //    {
+            //        foreach (var rezult in result)
+            //        {
+            //            sw.WriteLine(rezult.ToString());
+            //        }
+            //    }
             //}
-            // Keep the console window open in debug mode.
-            Console.WriteLine("Press any key");
-            Console.ReadKey();
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine(e.Message);
+            //}
+
+            //Console.ReadKey();
+            #endregion
+
+            #region Task6_3
+            //DriveInfo di = new System.IO.DriveInfo(@"c:\");
+
+            //if (!di.IsReady)
+            //{
+            //    Console.WriteLine("The drive {0} could not be read", di.Name);
+            //}
+            //DirectoryInfo rootDir = di.RootDirectory;
+            //WalkDirectoryTree(rootDir);
+
+            //// Write out all the files that could not be processed.
+            ////Console.WriteLine("Files with restricted access:");
+            ////foreach (string s in log)
+            ////{
+            ////    Console.WriteLine(s);
+            ////}
+            //// Keep the console window open in debug mode.
+            //Console.WriteLine("Press any key");
+            //Console.ReadKey();
+            #endregion
+
+            #region Task6_4
+            //string dirName = "D:\\temp";
+
+            //try
+            //{
+            //    if (Directory.Exists(dirName))
+            //    {
+            //        Console.WriteLine("Файлы:");
+            //        string[] files = Directory.GetFiles(dirName);
+            //        foreach (string s in files)
+            //        {
+            //            using (StreamReader sr = new StreamReader(s, System.Text.Encoding.Default))
+            //            {
+            //                string line;
+            //                while ((line = sr.ReadLine()) != null)
+            //                {
+            //                    Console.WriteLine($"{s.n}: {line}");
+            //                }
+            //            }
+            //            Console.WriteLine(s);
+            //        }
+            //    }
+            //}
+            //catch(Exception e)
+            //{
+            //    Console.WriteLine(e.Message);
+            //}
+            //Console.ReadKey();
             #endregion
         }
 
-        static void WalkDirectoryTree(System.IO.DirectoryInfo root)
+        public static double Div(double dividend, double divisor)
         {
-            System.IO.FileInfo[] files = null;
-            System.IO.DirectoryInfo[] subDirs = null;
+            if (divisor == 0)
+                throw new DivideByZeroException(
+                   "Division by Zero not posible");
 
-            // First, process all the files directly under this folder
+            return dividend / divisor;
+        }
+
+        static void WalkDirectoryTree(DirectoryInfo root)
+        {
+            FileInfo[] files = null;
+            DirectoryInfo[] subDirs = null;
+
             try
             {
                 files = root.GetFiles("*.*");
             }
-            // This is thrown if even one of the files requires permissions greater
-            // than the application provides.
             catch (UnauthorizedAccessException e)
             {
-                // This code just writes out the message and continues to recurse.
-                // You may decide to do something different here. For example, you
-                // can try to elevate your privileges and access the file again.
                 log.Add(e.Message);
             }
 
-            catch (System.IO.DirectoryNotFoundException e)
+            catch (DirectoryNotFoundException e)
             {
                 Console.WriteLine(e.Message);
             }
 
             if (files != null)
             {
-                foreach (System.IO.FileInfo fi in files)
+                foreach (FileInfo fi in files)
                 {
-                    // In this example, we only access the existing FileInfo object. If we
-                    // want to open, delete or modify the file, then
-                    // a try-catch block is required here to handle the case
-                    // where the file has been deleted since the call to TraverseTree().
-                    Console.WriteLine(fi.FullName);
-                    File.WriteAllText(path, fi.FullName);
+                    Console.WriteLine($"\n{fi.Name}     {fi.Length}");
+                    File.AppendAllText(path, $"\n{fi.Name}     {fi.Length}");
                 }
 
-                // Now find all the subdirectories under this directory.
                 subDirs = root.GetDirectories();
-
-                foreach (System.IO.DirectoryInfo dirInfo in subDirs)
+                foreach (DirectoryInfo dirInfo in subDirs)
                 {
-                    // Resursive call for each subdirectory.
                     WalkDirectoryTree(dirInfo);
                 }
             }
-        }
-
-        public static double Div(double dividend, double divisor)
-        {
-            if (divisor == 0)
-                throw new System.DivideByZeroException(
-                   "Division by Zero not posible");
-
-            return dividend / divisor;
         }
     }
 }
