@@ -134,6 +134,177 @@ namespace Exception_handling
             //}
             //Console.ReadKey();
             #endregion
+
+            #region HomeWork6_A
+            //Dictionary<string, string> phoneBook = new Dictionary<string, string>();
+            //List<string> oPhone = new List<string>();
+            //List<string> resultPhones = new List<string>();
+            //string name;
+            //string phone;
+            //var currentDirr = Directory.GetCurrentDirectory();
+            //string phones = currentDirr + @"\phones.txt";
+            //string newPhones = currentDirr + @"\ophones.txt";
+            //string resphones = currentDirr + @"\New.txt";
+
+            //try
+            //{
+            //    using (StreamReader sr = new StreamReader(phones, System.Text.Encoding.Default))
+            //    {
+            //        string line;
+            //        while ((line = sr.ReadLine()) != null)
+            //        {
+            //            string[] arrdigits = line.Split(new char[] { '_', '/' }, 2);
+            //            name = arrdigits[1];
+            //            phone = arrdigits[0];
+            //            phoneBook.Add(name, phone);
+            //            oPhone.Add(phone);
+            //            if (ConvertToNewStand(phone) != null )
+            //            {
+            //                resultPhones.Add(ConvertToNewStand(phone));
+            //            }
+            //            Console.WriteLine($"{name} / {phone}");
+            //        }
+            //    }
+            //    using (StreamWriter sw = new StreamWriter(newPhones, false, System.Text.Encoding.Default))
+            //    {
+            //        foreach (var phon in oPhone)
+            //        {
+            //            sw.WriteLine(phon);
+            //        }
+            //    }
+            //    using (StreamReader sr = new StreamReader(newPhones, System.Text.Encoding.Default))
+            //    {
+            //        string line;
+            //        Console.WriteLine("");
+            //        while ((line = sr.ReadLine()) != null)
+            //        {
+            //            Console.WriteLine($"{line}");
+            //        }
+            //    }
+            //    using (StreamWriter sw = new StreamWriter(resphones, false, System.Text.Encoding.Default))
+            //    {
+            //        foreach (var resultPhone in resultPhones)
+            //        {
+            //            sw.WriteLine(resultPhone);
+            //        }
+            //    }
+            //    using (StreamReader sr = new StreamReader(resphones, System.Text.Encoding.Default))
+            //    {
+            //        string line;
+            //        Console.WriteLine("");
+            //        while ((line = sr.ReadLine()) != null)
+            //        {
+            //            Console.WriteLine($"{line}");
+            //        }
+            //    }
+            //}
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine(e.Message);
+            //}
+
+            //Console.ReadKey();
+            #endregion
+
+            #region HomeWork6_B
+            int count = 0;
+            int startVal = 1;
+            int endVal = 100;
+            bool readFile = false;
+            string key;
+            string line;
+
+            Console.Write("Choose method for enter digits(c-console,f-file): ");
+            key = Console.ReadLine();
+            if (key.ToLower() == "f")
+            {
+                readFile = true;
+            }
+            else if (key.ToLower() == "c")
+            {
+                readFile = false;
+            }
+
+            if (readFile)
+            {
+                using (StreamReader sr = new StreamReader(path, System.Text.Encoding.Default))
+                {
+                    while ((line = sr.ReadLine()) != null && count < 10 && startVal < 99)
+                    {
+                        try
+                        {
+                            Console.Write($"Enter {count + 1} digit: ");
+                            if (ReaNumber(startVal, endVal, line))
+                            {
+                                Console.WriteLine($"\nDigit in range [{startVal} , {endVal}] {int.Parse(line)}");
+                                startVal = int.Parse(line);
+                                count++;
+                            }
+                        }
+                        catch (FormatException e)
+                        {
+                            Console.Error.WriteLine(e.Message);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                while (count < 10 && startVal < 99)
+                {
+                    try
+                    {
+                        Console.Write($"Enter {count + 1} digit: ");
+                        line = Console.ReadLine();
+                        if (ReaNumber(startVal, endVal, line))
+                        {
+                            Console.WriteLine($"\nDigit in range [{startVal} , {endVal}] {int.Parse(line)}");
+                            startVal = int.Parse(line);
+                            count++;
+                        }
+                    }
+                    catch (FormatException e)
+                    {
+                        Console.Error.WriteLine(e.Message);
+                    }
+                }
+            }
+            #endregion
+        }
+
+        private static bool ReaNumber(int start, int end, string val)
+        {
+            int digit;
+            if (int.TryParse(val, out digit))
+            {
+                return digit > start && digit < end;
+            }
+            else
+            {
+                throw new FormatException(
+                    "value not a digit");
+            }
+        }
+
+        private static string ConvertToNewStand(string phone)
+        {
+            Int64 ph;
+            if (Int64.TryParse(phone, out ph))
+            {
+                if (phone.Length == 9)
+                {
+                    return "+380" + phone;
+                }
+                else if (phone.Length == 10)
+                {
+                    return "+38" + phone;
+                }
+                else if (phone.Length == 11)
+                {
+                    return "+3" + phone;
+                }
+            }
+            return null;
         }
 
         public static double Div(double dividend, double divisor)
